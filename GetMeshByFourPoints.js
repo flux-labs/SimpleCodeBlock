@@ -1,6 +1,6 @@
 'use strict';
 var modeling = require('flux-modelingjs').initialize().modeling;
-function run(Vertices) {
+function run(Vertices){
     return {
         Mesh:GetMeshByFourPoints(Vertices)
     };
