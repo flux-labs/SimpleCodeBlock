@@ -1,5 +1,5 @@
 'use strict';
-var modeling = require('flux-modelingjs').initialize().modeling;
+var modeling = require('flux-modelingjs').modeling();
 function run(x,y,z, spacingX, spacingY, spacingZ) {
   return {
       Pts: GetPointGrid3DWithSpacing(x,y,z, spacingX, spacingY, spacingZ)

@@ -1,8 +1,8 @@
 'use strict';
-var modeling = require('flux-modelingjs').initialize().modeling;
-function run(XDomain, YDomain, ZDomain, num) {
+var modeling = require('flux-modelingjs').modeling();
+function run(domainX, domainY, domainZ, num) {
   return {
-      Pts: GetPointGrid3DRandomFromDomain(XDomain, YDomain, ZDomain, num)
+      Pts: GetPointGrid3DRandomFromDomain(domainX, domainY, domainZ, num)
   };
 }
 module.exports = {

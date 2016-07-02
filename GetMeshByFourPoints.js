@@ -1,8 +1,8 @@
 'use strict';
-var modeling = require('flux-modelingjs').initialize().modeling;
-function run(Vertices){
+var modeling = require('flux-modelingjs').modeling();
+function run(Points){
     return {
-        Mesh:GetMeshByFourPoints(Vertices)
+        Mesh:GetMeshByFourPoints(Points)
     };
 }
 module.exports = {

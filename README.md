@@ -1,62 +1,59 @@
 ### Flux: Code Block
 > Simple Code Blocks from the Parkerator Phase 1 and 2
 
-
 ### Domain.js
-Get
 - parameters: min(number), max(number)
 - returns: Domain(list of number)
 
-
 ### GetClosestIndexFromPTS.js
-parameters: min(number), max(number)
-returns: Domain(list of number)
+- parameters: min(number), max(number)
+- returns: index(number), point
 
 ### GetMeshByFourPoints.js	
-
-parameters: min(number), max(number)
-returns: Domain(list of number)
-
+![Alt text](/img/GetMeshByFourPoints.png?raw=true "GetMeshByFourPoints")
+- parameters: min(number), max(number)
+- returns: Domain(list of number)
 
 ### GetMeshExtrusionByFourPoints.js	
-parameters: min(number), max(number)
-returns: Domain(list of number)
-
+![Alt text](/img/GetMeshExtrusionByFourPoints.png?raw=true "GetMeshExtrusionByFourPoints")
+- parameters: points(ListOfPoint), height(number)
+- returns: mesh
 
 ### GetMeshFromExtrudedPoint.js	
 ![Alt text](/img/GetMeshExtrusionToPoint.png?raw=true "GetMeshExtrusionToPoint")
-parameters: points(ListOfPoint), height(number)
-returns: mesh, centerPoint
-
+- parameters: points(ListOfPoint), height(number)
+- returns: mesh, centerPoint
 
 ### GetPolylineFromPts.js
-parameters: min(number), max(number)
-returns: Domain(list of number)
-
+- parameters: min(number), max(number)
+- returns: Domain(list of number)
 
 ### Grid2D.js
-parameters: min(number), max(number)
-returns: Domain(list of number)
+![Alt text](/img/Grid2D.png?raw=true "Grid2D")
+- parameters: min(number), max(number)
+- returns: Domain(list of number)
 
+### Grid2DRndom.js
+![Alt text](/img/Grid2DRndom.png?raw=true "Grid2DRndom")
+- parameters: min(number), max(number)
+- returns: Domain(list of number)
 
-### Grid2DRndom.js	
-parameters: min(number), max(number)
-returns: Domain(list of number)
+### Grid3D.js
+![Alt text](/img/Grid3D.png?raw=true "Grid3D")
+- parameters: min(number), max(number)
+- returns: Domain(list of number)
 
+### Grid3DRndom.js
+![Alt text](/img/Grid3DRndom.png?raw=true "Grid3DRndom")
+- parameters: min(number), max(number)
+- returns: Domain(list of number)
 
-### Grid3D.js	
-parameters: min(number), max(number)
-returns: Domain(list of number)
+### IntersectionFromTwoLine.js
+![Alt text](/img/IntersectionFromTwoLine.png?raw=true "IntersectionFromTwoLine")
+[line-intersect Reference](https://github.com/psalaets/line-intersect)
 
-
-### Grid3DRndom.js	
-parameters: min(number), max(number)
-returns: Domain(list of number)
-
-### SunVector.js
-parameters: Latitude(number), Day(number), Hour(number), South(number)
-returns: SolarPath(line), SolarVector(point), SolarLog(string)
-
+- parameters: line1, line2
+- returns: point
 
 ### NPolyline
 ![Alt text](/img/Polyline.png?raw=true "NPolyline")
@@ -80,16 +77,13 @@ static methods
 * .BuildWithLine(LineList) : create NPolyline from line list
 
 
-### IntersectionFromTwoLine.js
-![Alt text](/img/Polyline.png?raw=true "IntersectionFromTwoLine")
-[Reference](https://github.com/psalaets/line-intersect)
-
-- parameters: line1, line2
-- returns: point
+### SunVector.js
+- parameters: Latitude(number), Day(number), Hour(number), South(number)
+- returns: SolarPath(line), SolarVector(point), SolarLog(string)
 
 
 ### RemapData
-parameters: min(number), max(number)
-returns: Domain(list of number)
+- parameters: min(number), max(number)
+- returns: Domain(list of number)
 
 
