@@ -50,10 +50,16 @@
 
 ### IntersectionFromTwoLine.js
 ![Alt text](/img/IntersectionFromTwoLine.png?raw=true "IntersectionFromTwoLine")
-[line-intersect Reference](https://github.com/psalaets/line-intersect)
-
+Reference: [line-intersect](https://github.com/psalaets/line-intersect)
 - parameters: line1, line2
 - returns: point
+
+### IsInsideOfPolyline.js
+![Alt text](/img/IsInsideOfPolyline_01.png?raw=true "false")
+![Alt text](/img/IsInsideOfPolyline_02.png?raw=true "true")
+Reference: [point-in-polygon](https://github.com/substack/point-in-polygon)
+- parameters: Polyline(ListOfPoints), Point
+- returns: Boolean
 
 ### NPolyline
 ![Alt text](/img/Polyline.png?raw=true "NPolyline")
@@ -76,14 +82,17 @@ static methods
 * .BuildWithPoint(PointList) : create NPolyline from Point list
 * .BuildWithLine(LineList) : create NPolyline from line list
 
-
 ### SunVector.js
+Reference: ASHRAE Handbook of Fundamentals
 - parameters: Latitude(number), Day(number), Hour(number), South(number)
 - returns: SolarPath(line), SolarVector(point), SolarLog(string)
 
+### GridOptimizerWithinPolyline.js 
+- parameters: 
+- returns: 
 
-### RemapData
-- parameters: min(number), max(number)
-- returns: Domain(list of number)
+### RemapDataToPolarCoord.js
+- parameters:
+- returns:
 
 

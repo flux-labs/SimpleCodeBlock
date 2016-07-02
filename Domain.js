@@ -1,5 +1,5 @@
 'use strict';
-var modeling = require('flux-modelingjs').initialize().modeling;
+var modeling = require('flux-modelingjs').modeling();
 function run(min, max) {
   return {
       Domain: GetDomainFromMinMax(min, max)
