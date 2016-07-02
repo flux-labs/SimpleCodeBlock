@@ -60,8 +60,9 @@ returns: Domain(list of number)
 parameters: Latitude(number), Day(number), Hour(number), South(number)
 returns: SolarPath(line), SolarVector(point), SolarLog(string)
 
-
+![Alt text](/img/Polyline.png?raw=true "Optional Title")
 ### NPolyline
+![Alt text](/relative/path/to/Polyline.png?raw=true "Optional Title")
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
