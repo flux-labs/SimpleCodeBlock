@@ -1,67 +1,67 @@
-Flux: Code Block
+### Flux: Code Block
 
-Simple Code Blocks from the Parkerator Phase 1 and 2
+> Simple Code Blocks from the Parkerator Phase 1 and 2
 
 
-Domain.js
+### Domain.js
 Get
-parameters: min(number), max(number)
-returns: Domain(list of number)
+- parameters: min(number), max(number)
+- returns: Domain(list of number)
 
 Usage
 
 
-GetClosestIndexFromPTS.js
+### GetClosestIndexFromPTS.js
 
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
-GetMeshByFourPoints.js	
+### GetMeshByFourPoints.js	
 
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
 
-GetMeshExtrusionByFourPoints.js	
+### GetMeshExtrusionByFourPoints.js	
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
 
-GetMeshFromExtrudedPoint.js	
+### GetMeshFromExtrudedPoint.js	
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
 
-GetPolylineFromPts.js
+### GetPolylineFromPts.js
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
 
-Grid2D.js
+### Grid2D.js
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
 
-Grid2DRndom.js	
+### Grid2DRndom.js	
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
 
-Grid3D.js	
+### Grid3D.js	
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
 
-Grid3DRndom.js	
+### Grid3DRndom.js	
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
-SunVector.js
+### SunVector.js
 parameters: Latitude(number), Day(number), Hour(number), South(number)
 returns: SolarPath(line), SolarVector(point), SolarLog(string)
 
 
-NPolyline
+### NPolyline
 parameters: min(number), max(number)
 returns: Domain(list of number)
 
@@ -82,13 +82,13 @@ static methods
 .BuildWithLine(LineList) :
 
 
-IntersectionFromTwoLine
+### IntersectionFromTwoLine.js
 (https://github.com/psalaets/line-intersect)
 parameters: line1, line2
 returns: point
 
 
-RemapData
+### RemapData
 parameters: min(number), max(number)
 returns: Domain(list of number)
 

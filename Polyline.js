@@ -39,6 +39,10 @@ NPolyline.prototype.Add = function(v){
     this.pts.push(v);
   }
 }
+NPolyline.prototype.ToString = function(){
+  if(this.isClosed) return "this is a closed ployline, and the length is " + this.ComputeLength() + ", and the area is " + this.ComputeArea() + ", and it has " + this.pts.Count + " points." ;
+  else return "this is a open ployline, and the length is " + this.ComputeLength() + ", and it has " + this.pts.Length + " points." ;
+}
 NPolyline.prototype.Closed = function(){
   this.isClosed = true;
   if(this.pts[0].Distance(this.pts[this.pts.length - 1]) != 0) this.pts.push(this.pts[0]);
@@ -61,7 +65,16 @@ NPolyline.prototype.GetClosedPtFromPt = function(vec){
   return this.pts[index];
 }
 NPolyline.prototype.GetCenterPt = function(){
-    let pt = [0,0,0];
+  let pt = [0,0,0];
+  if(this.pts[0].Distance(this.pts[this.pts.length-1]) == 0){
+    let c = this.pts.length;
+    for(var i =0; i < c; ++i){
+        pt[0] += this.pts[i].x;
+        pt[1] += this.pts[i].y;
+        pt[2] += this.pts[i].z;
+    }
+    return modeling.entities.point([pt[0]/c-1,pt[1]/c-1,pt[2]/c-1]);
+  }else{
     let c = this.pts.length;
     for(var i =0; i < c; ++i){
         pt[0] += this.pts[i].x;
@@ -69,13 +82,7 @@ NPolyline.prototype.GetCenterPt = function(){
         pt[2] += this.pts[i].z;
     }
     return modeling.entities.point([pt[0]/c,pt[1]/c,pt[2]/c]);
-}
-NPolyline.prototype.ToVecs = function(){
-  let nvecs = [];
-  for(let i = 0, c = this.pts.length; i < c ; ++i){
-    nvecs.push(new NVector(this.pts[i].x, this.pts[i].y, this.pts[i].z));
   }
-  return nvecs;
 }
 NPolyline.prototype.ComputeArea = function(){ // !!!!this doe not consider concave
   let area = 0.0;
@@ -83,7 +90,7 @@ NPolyline.prototype.ComputeArea = function(){ // !!!!this doe not consider conca
     let cPt = this.GetCenterPt();
     let tempPts = this.pts;
     tempPts.push(new NVector(cPt.__data__.point[0], cPt.__data__.point[1], cPt.__data__.point[2]));
-    for (let i = 0, c = tempPts.length; i < c - 4; ++i){
+    for (let i = 0, c = tempPts.length; i < c - 2; ++i){
         let d0 = tempPts[c -1].Distance(tempPts[i]);
         let d1 = tempPts[c -1].Distance(tempPts[i + 1]);
         let d2 = tempPts[i].Distance(tempPts[i + 1]);
@@ -91,13 +98,8 @@ NPolyline.prototype.ComputeArea = function(){ // !!!!this doe not consider conca
     }
     return area;
   } else{
-    for (let i = 0, c = tempPts.length; i < c - 3; ++i){
-        let d0 = tempPts[c -1].Distance(tempPts[i]);
-        let d1 = tempPts[c -1].Distance(tempPts[i + 1]);
-        let d2 = tempPts[i].Distance(tempPts[i + 1]);
-        area += this.GetAreaByThreeLength(d0, d1, d2);
-    }
-    return area;
+ 
+    return "it need to be closed to compute the area."
   }
 }
 NPolyline.prototype.GetAreaByThreeLength = function(len1, len2, len3){   // using Heron's Formula
@@ -110,6 +112,13 @@ NPolyline.prototype.ComputeLength = function(){
     totalLength += this.pts[i+1].Distance(this.pts[i])
   }
   return totalLength;
+}
+NPolyline.prototype.ToVecs = function(){
+  let nvecs = [];
+  for(let i = 0, c = this.pts.length; i < c ; ++i){
+    nvecs.push(new NVector(this.pts[i].x, this.pts[i].y, this.pts[i].z));
+  }
+  return nvecs;
 }
 NPolyline.prototype.ToPoint = function(){
   let nvecs = [];
