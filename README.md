@@ -28,8 +28,9 @@ returns: Domain(list of number)
 
 
 ### GetMeshFromExtrudedPoint.js	
-parameters: min(number), max(number)
-returns: Domain(list of number)
+![Alt text](/img/GetMeshExtrusionToPoint.png?raw=true "GetMeshExtrusionToPoint")
+parameters: points(ListOfPoint), height(number)
+returns: mesh, centerPoint
 
 
 ### GetPolylineFromPts.js
@@ -60,27 +61,27 @@ returns: Domain(list of number)
 parameters: Latitude(number), Day(number), Hour(number), South(number)
 returns: SolarPath(line), SolarVector(point), SolarLog(string)
 
-![Alt text](/img/Polyline.png?raw=true "Optional Title")
+
 ### NPolyline
-![Alt text](/relative/path/to/Polyline.png?raw=true "Optional Title")
-parameters: min(number), max(number)
-returns: Domain(list of number)
+![Alt text](/img/Polyline.png?raw=true "NPolyline")
+- parameters: Point(ListOfPoint), closed(bool)
+- returns: polyline(ListOfLine), Mesh, Length(number), Area(number)
 
 instance methods
-.Add(Point) :
-.Closed() :
-.Open() :
-.GetClosedPtFromPt(Point) :
-.GetCenterPt() :
-.ComputeArea() : 
-.ComputeLength();
-.ToPoint();
-.ToLine();
-.ToMesh();
+.Add(Point) : Add point to polyline
+.Closed() : make it a closed polyline
+.Open() : make it a open polyline
+.GetClosedPtFromPt(Point) : retrun the closest point to a reference point
+.GetCenterPt() : return the center point of the polyline
+.ComputeArea() : return the area of polyline
+.ComputeLength() : return the length of polyline
+.ToPoint() : convert to list of point
+.ToLine() : convert to list of line
+.ToMesh() : convert to mesh
 
 static methods
-.BuildWithPoint(PointList) :
-.BuildWithLine(LineList) :
+.BuildWithPoint(PointList) : create NPolyline from Point list
+.BuildWithLine(LineList) : create NPolyline from line list
 
 
 ### IntersectionFromTwoLine.js
