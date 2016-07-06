@@ -91,8 +91,24 @@ Reference: ASHRAE Handbook of Fundamentals
 - parameters: 
 - returns: 
 
-### RemapDataToPolarCoord.js
+
+>Data Visualization
+
+### VisDataToPolarCoord.js
+![Alt text](/img/VisDataToPolarCoord.png?raw=true "false")
 - parameters:
 - returns:
 
+### VisDataToCarteCoord.js
+- parameters:
+- returns:
 
+### DataVisChart.js
+- parameters:
+- returns:
+
+instance methods
+*
+
+static methods
+*
