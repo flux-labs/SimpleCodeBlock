@@ -1,111 +1,97 @@
 'use strict';
 var modeling = require('flux-modelingjs').modeling();
-function run( data, width, height, point, circular, flip ) {
-
+function run( data, scale, width, height, point, circular, flip  ) {
     if (width < 10) width = 10;
     if (height < 10) height = 10;
-    NDataVis dVis = new NDataVis(data, width, height);
-    dVis.origin = new NVector(p.X, p.Y, p.Z);
+    let dVis = new NDataVis(data, width, height);
+    dVis.origin = new NVector(point.point[0] - width * 0.5, point.point[1] - height * 0.5, point.point[2]);
+    if (scale < 1) dVis.scale = 1;
+    else dVis.scale = scale;
 
-    if (!circular)
-    {
-        if (flip)
-        {
+    let ln = [];
+    let cir = [];
+    
+    if (!circular){
+        if (flip){
             dVis.InitForBarChartY();
-            DA.SetDataList(0, NLine.GetRhinoLinesFromNLines(dVis.VisForBarChartY()));
-        }
-        else
-        {
+            ln = NLine.GetFluxLinesFromNLines(dVis.VisForBarChartY());
+        }else{
             dVis.InitForBarChartX();
-            DA.SetDataList(0, NLine.GetRhinoLinesFromNLines(dVis.VisForBarChartX()));
+            ln = NLine.GetFluxLinesFromNLines(dVis.VisForBarChartX());
         }
     }
-    if (circular)
-    {
+    if (circular){
         dVis.InitForCircularChart();
-        dVis.scale = s;
-        if (flip)
-        {
-            DA.SetDataList(0, NLine.GetRhinoLinesFromNLines(dVis.GetLineByRemapDataToPolarFlip()));
-            DA.SetDataList(1, dVis.GetCircleFromMinMax());
-        }
-        else
-        {
-            DA.SetDataList(0, NLine.GetRhinoLinesFromNLines(dVis.GetLineByRemapDataToPolar()));
-            DA.SetDataList(1, dVis.GetCircleFromMinMax());
+        if (flip){
+            ln = NLine.GetFluxLinesFromNLines(dVis.GetLineByRemapDataToPolarFlip());
+            cir = dVis.GetCircleFromMinMax();
+        }else{
+            ln = NLine.GetFluxLinesFromNLines(dVis.GetLineByRemapDataToPolar());
+            cir = dVis.GetCircleFromMinMax();
         }
     }
-
-
-
-
   return {
-      //Ln: GetLineByRemapDataToPolar(Data, Point, Scale),
-      //Cir:GetCircleFromMinMax(Data, Point, Scale)
+      Ln: ln,
+      Cir: cir
   };
 }
 module.exports = {
     run: run
 };
-
-
-function NDataVis( _data, _height, _width){
-    public List<double> data = new List<double>();
-    public NVector origin = NVector.Origin();
-    public double height = 100.0;
-    public double width = 100.0;
-    public double resX = 0.0;
-    public double resY = 0.0;
-    public double scale = 1.0;
-    public double intervalX = 0.0;
-    public double intervalY = 0.0;
-    public double[] domainX = new double[2];
-    public double[] domainY = new double[2];
-    public double[] domain = new double[2]; // for circular one
+function NDataVis( _data, _width, _height){
     this.data = _data;
     this.height = _height;
     this.width = _width;
+    this.origin = NVector.Origin();
+    this.resX = 0.0;
+    this.resY = 0.0;
+    this.scale = 1.0;
+    this.intervalX = 0.0;
+    this.intervalY = 0.0;
+    this.domainX = [];
+    this.domainY = [];
+    this.domain = []; // for circular one
 }
 ////////////////////////////// bar chart
 NDataVis.prototype.InitForBarChartX=function(){
-    domainX[0] = 0;
-    domainX[1] = this.data.Count;
-    domainY = NDataVis.GetDomain(data);
+    this.domainX[0] = 0;
+    this.domainX[1] = this.data.length;
+    this.domainY = NDataVis.GetDomain(this.data);
 }
 NDataVis.prototype.VisForBarChartX=function(){
-    List<NLine> nLine = new List<NLine>();
-    this.intervalX = (this.width) / (double)this.domainX[1];
+    let nLine = [];
+    this.intervalX = this.width /this.domainX[1];
     this.domainY = NDataVis.GetDomain(this.data);
-    for (int i = 0; i < this.domainX[1]; i++)
-    {
-        double x = this.origin.X + intervalX * i;
-        double y = this.origin.Y;
-        double offsetY = Remap(this.data[i], this.domainY[0], this.domainY[1], this.origin.Y, this.origin.Y + this.height);
-        nLine.Add(new NLine(new NVector(x, y, 0), new NVector(x, offsetY, 0)));
+    for (let i = 0; i < this.domainX[1]; i++){
+        let x = this.origin.x + this.intervalX * i;
+        let y = this.origin.y;
+        let offsetY = NDataVis.Remap(this.data[i], this.domainY[0], this.domainY[1], this.origin.y, this.origin.y + this.height);
+        nLine.push(new NLine(new NVector(x, y, 0), new NVector(x, offsetY, 0)));
     }
     return nLine;
 }
-NDataVis.prototype.InitForBarChartY(){
-    domainY[0] = 0;
-    domainY[1] = this.data.Count;
-    domainX = NDataVis.GetDomain(data);
+NDataVis.prototype.InitForBarChartY=function(){
+    this.domainY[0] = 0;
+    this.domainY[1] = this.data.length;
+    this.domainX = NDataVis.GetDomain(this.data);
 }
 NDataVis.prototype.VisForBarChartY=function(){
-    List<NLine> nLine = new List<NLine>();
-    this.intervalY = (this.height) / (double)this.domainY[1];
+    let nLine = [];
+    this.intervalY = this.height / this.domainY[1];
     this.domainX = NDataVis.GetDomain(this.data);
-    for (int i = 0, c = (int)this.domainY[1]; i < c; ++i){
-        double x = this.origin.X;
-        double y = (this.origin.Y - intervalY * i) + this.height;
-        double offsetX = Remap(this.data[i], this.domainX[0], this.domainX[1], this.origin.X, this.origin.X + this.width);
-        nLine.Add(new NLine(new NVector(x, y, 0), new NVector(offsetX, y, 0)));
+    for (let i = 0, c = this.domainY[1]; i < c; ++i){
+        let x = this.origin.x;
+        let y = (this.origin.y - this.intervalY * i) + this.height;
+        let offsetX = NDataVis.Remap(this.data[i], this.domainX[0], this.domainX[1], this.origin.x, this.origin.x + this.width);
+        nLine.push(new NLine(new NVector(x, y, 0), new NVector(offsetX, y, 0)));
     }
+
     return nLine;
 }
 NDataVis.prototype.GetLegendForBarChart = function(){
-    NVector p1 = new NVector(this.origin.X, this.origin.Y, 0);
-    NVector p2 = new NVector(this.origin.X + this.width, this.origin.Y, 0);
-    NVector p3 = new NVector(this.origin.X, this.origin.Y + this.height, 0);
+    let p1 = new NVector(this.origin.x, this.origin.y, 0);
+    let p2 = new NVector(this.origin.x + this.width, this.origin.y, 0);
+    let p3 = new NVector(this.origin.x, this.origin.y + this.height, 0);
     return null;
 }
 ////////////////////////////// end bar chart
@@ -113,115 +99,99 @@ NDataVis.prototype.GetLegendForBarChart = function(){
 ////////////////////////////// bar chart
 NDataVis.prototype.InitForCircularChart = function(){
     this.domain = NDataVis.GetDomain(this.data);
-    this.origin = new NVector(this.origin.X + (this.width * 0.5), this.origin.Y + (this.height * 0.5), 0);
+    this.origin = new NVector(this.origin.x + (this.width * 0.5), this.origin.y + (this.height * 0.5), 0);
 }
-NDataVis.GetLineByRemapDataToCarte = function(List<double> data, Point3d p, double scale, double width, double height){ // static method // VisDataToCarteCoord
-    List<Line> lns = new List<Line>();
-    int xRes = data.Count; // num for div Radius
-    double kInterval = ((3.14159 * 2) - 0.0) / (double)xRes;
-
-    for (int j = 0; j < xRes; j++)
-    {
-        double angle = kInterval * j;
-        double radius = scale * data[j];
-        double y = radius * (Math.Sin(angle));
-        double x = radius * (Math.Cos(angle));
-        Point3d p2 = new Point3d(x + p.X, y + p.Y, 0 + p.Z);
-        lns.Add(new Line(p, p2));
+NDataVis.GetLineByRemapDataToCarte = function( data, p, scale, width, height){ // static method // VisDataToCarteCoord
+    let lns = [];
+    this.resX = this.data.length; // num for div Radius
+    let kInterval = ((3.14159 * 2) - 0.0) / xRes;
+    for (let j = 0; j < xRes; j++){
+        let angle = kInterval * j;
+        let radius = scale * data[j];
+        let y = radius * (Math.sin(angle));
+        let x = radius * (Math.cos(angle));
+        let p2 = new NVector(x + p.x, y + p.y, 0 + p.z);
+        ns.push(new NLine(p, p2));
     }
     return lns;
 }
 NDataVis.prototype.GetLineByRemapDataToPolar = function(){
-    List<NLine> nLine = new List<NLine>();
-    this.resX = this.data.Count; // num for div Radius
-    double kInterval = ((3.14159 * 2) - 0.0) / (double)this.resX;
-    for (int j = 0; j < this.resX; j++){
-        double angle = kInterval * j;
-        double radius = this.scale * data[j];
-        double y = radius * (Math.Sin(-angle));
-        double x = radius * (Math.Cos(-angle));
-        NVector p2 = new NVector(x + this.origin.X, y + this.origin.Y, 0 + this.origin.Z);
-        nLine.Add(new NLine(new NVector(this.origin.X, this.origin.Y, this.origin.Z), new NVector(p2.X, p2.Y, p2.Z)));
+    let nLine = [];
+    this.resX = this.data.length; // num for div Radius
+    let kInterval = ((3.14159 * 2) - 0.0) / this.resX;
+    for (let j = 0; j < this.resX; j++){
+        let angle = kInterval * j;
+        let radius = this.scale * this.data[j];
+        let y = radius * (Math.sin(-angle));
+        let x = radius * (Math.cos(-angle));
+        let p2 = new NVector(x + this.origin.x, y + this.origin.y, 0 + this.origin.z);
+        nLine.push(new NLine(new NVector(this.origin.x, this.origin.y, this.origin.z), new NVector(p2.x, p2.y, p2.z)));
     }
     return nLine;
 }
 NDataVis.prototype.GetLineByRemapDataToPolarFlip = function(){
-    List<NLine> nLine = new List<NLine>();
-    this.resX = this.data.Count; // num for div Radius
-    double kInterval = ((3.14159 * 2) - 0.0) / (double)this.resX;
-    for (int j = 0; j < this.resX; j++){
-        double angle = kInterval * j;
-        double radius = this.scale * data[j];
-        double y = radius * (Math.Sin(angle));
-        double x = radius * (Math.Cos(angle));
-        NVector p2 = new NVector(x + this.origin.X, y + this.origin.Y, 0 + this.origin.Z);
-        nLine.Add(new NLine(new NVector(this.origin.X, this.origin.Y, this.origin.Z), new NVector(p2.X, p2.Y, p2.Z)));
+    let nLine = [];
+    this.resX = this.data.length; // num for div Radius
+    let kInterval = ((3.14159 * 2) - 0.0) / this.resX;
+    for (let j = 0; j < this.resX; j++){
+        let angle = kInterval * j;
+        let radius = this.scale * this.data[j];
+        let y = radius * (Math.sin(angle));
+        let x = radius * (Math.cos(angle));
+        let p2 = new NVector(x + this.origin.x, y + this.origin.y, 0 + this.origin.z);
+        nLine.push(new NLine(new NVector(this.origin.x, this.origin.y, this.origin.z), new NVector(p2.x, p2.y, p2.z)));
     }
     return nLine;
 }
 NDataVis.prototype.GetCircleFromMinMax = function(){
-    List<Circle> cir = new List<Circle>();
-    Rhino.Geometry.Point3d oPt = new Rhino.Geometry.Point3d(this.origin.X, this.origin.Y, this.origin.Z);
-
-    cir.Add(new Rhino.Geometry.Circle(oPt, this.domain[0] * scale));
-    cir.Add(new Rhino.Geometry.Circle(oPt, this.domain[1] * scale));
+    let cir = [];
+    let pt = modeling.entities.point([this.origin.x , this.origin.y , this.origin.z]);
+    cir.push( modeling.entities.circle( pt, this.domain[0] * this.scale))
+    cir.push( modeling.entities.circle( pt, this.domain[1] * this.scale))
     return cir;
 }
 NDataVis.prototype.GetLegendForCircleVis = function(){
-    NVector p = new NVector(this.origin.X + this.width * 0.5, this.origin.Y + this.height, 0);
+    let p = new NVector(this.origin.x + this.width * 0.5, this.origin.y + this.height, 0);
     return null;
 }
-
-
 //////////////////////////////////////////////////////////////////// static method
 NDataVis.GetDomain = function(doubleList){
-    double[] domain = new double[2];
-    domain[0] = doubleList[0];
-    domain[1] = doubleList[0];
-    for (int i = 0, c = doubleList.Count; i < c; ++i)
-    {
-        if (domain[0] > doubleList[i])
-        {
+    let domain = [];
+    domain.push(doubleList[0]);
+    domain.push(doubleList[0]);
+    for(let i = 0, c = doubleList.length; i < c; ++i){
+        if (domain[0] > doubleList[i]){
             domain[0] = doubleList[i];
         }
-        if (domain[1] < doubleList[i])
-        {
+        if (domain[1] < doubleList[i]){
             domain[1] = doubleList[i];
         }
     }
     return domain;
 }
-NDataVis.Remap = function(double CValue, double OldMin, double OldMax, double NewMin, double NewMax){
+NDataVis.Remap = function(CValue, OldMin, OldMax, NewMin, NewMax){
     return (((CValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin;
 }
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////// end NDataVis class
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////// extra utility
 function NLine( _v1, _v2){
-    public NVector ptStart;
-    public NVector ptEnd;
     this.ptStart = _v1;
     this.ptEnd = _v2;
 }
-NLine.prototype.ToFlux = function()
-{
-    return new Rhino.Geometry.Line(new Point3d(ptStart.X, ptStart.Y, ptStart.Z), new Point3d(ptEnd.X, ptEnd.Y, ptEnd.Z));
+NLine.prototype.ToFlux = function(){
+    //return new Rhino.Geometry.Line(new Point3d(ptStart.X, ptStart.Y, ptStart.Z), new Point3d(ptEnd.X, ptEnd.Y, ptEnd.Z));
 }
-NLine.GetFluxLinesFromNLines = function(lns)
-        {
-            List<Line> temp = new List<Line>();
-            for (int i = 0, c = lns.Count; i < c; ++i)
-            {
-                temp.Add( NLine.ToRhino(lns[i]));
-            }
-            return temp;
-        }
-NLine.ToRhino = function(nLn){
-    return new Rhino.Geometry.Line(new Point3d(nLn.ptStart.X, nLn.ptStart.Y, nLn.ptStart.Z), new Point3d(nLn.ptEnd.X, nLn.ptEnd.Y, nLn.ptEnd.Z));
+NLine.GetFluxLinesFromNLines = function(lns){
+    let temp = [];
+    for(let i = 0, c = lns.length; i < c; ++i){
+        let v0 = modeling.entities.point([lns[i].ptStart.x, lns[i].ptStart.y, lns[i].ptStart.z]);
+        let v1 = modeling.entities.point([lns[i].ptEnd.x, lns[i].ptEnd.y, lns[i].ptEnd.z]);
+        temp.push(modeling.entities.line(v0, v1));
+    }
+    return temp;
 }
-
 function NVector(_x,_y,_z){
     if(arguments.length == 0){
         this.x = 0;
@@ -242,3 +212,6 @@ function NVector(_x,_y,_z){
 NVector.prototype.ToString = function(){
     console.log("x: " + this.x + " , y: " + this.y +" , z: " + this.z);
 };
+NVector.Origin = function(){
+    return new NVector(0,0,0);
+}

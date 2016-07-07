@@ -99,16 +99,13 @@ Reference: ASHRAE Handbook of Fundamentals
 - parameters:
 - returns:
 
-### VisDataToCarteCoord.js
-- parameters:
-- returns:
 
 ### DataVisChart.js
-- parameters:
-- returns:
+- parameters: data(listOfNumber), scale(number), width(number), height(number), circular(bool), flip(bool)
+- returns: barChart(listOfLine) or CircularBarChart(listOfLine)
+![Alt text](/img/VisDataBarChart.png?raw=true "bar chart")
+![Alt text](/img/VisDataCircularBarChart.png?raw=true "circular bar chart")
+![Alt text](/img/VisDataExample.png?raw=true "data vis example")
 
-instance methods
-*
 
-static methods
-*
+
