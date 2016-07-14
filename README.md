@@ -9,6 +9,11 @@
 - parameters: min(number), max(number)
 - returns: index(number), point
 
+### GetDuplication.js
+![Alt text](/img/GetDuplication.png?raw=true "GetMeshByFourPoints")
+- parameters: obj(json)
+- returns: obj(json)
+
 ### GetMeshByFourPoints.js	
 ![Alt text](/img/GetMeshByFourPoints.png?raw=true "GetMeshByFourPoints")
 - parameters: min(number), max(number)
@@ -23,6 +28,12 @@
 ![Alt text](/img/GetMeshExtrusionToPoint.png?raw=true "GetMeshExtrusionToPoint")
 - parameters: points(ListOfPoint), height(number)
 - returns: mesh, centerPoint
+
+### GetMeshRotation.js	
+![Alt text](/img/GetMeshRotation.png?raw=true "GetMeshExtrusionToPoint")
+- parameters: mesh(mesh), angle(number), local(bool)
+- returns: mesh
+
 
 ### GetPolylineFromPts.js
 - parameters: min(number), max(number)
@@ -99,13 +110,10 @@ Reference: ASHRAE Handbook of Fundamentals
 - parameters:
 - returns:
 
-
 ### DataVisChart.js
 - parameters: data(listOfNumber), scale(number), width(number), height(number), circular(bool), flip(bool)
 - returns: barChart(listOfLine) or CircularBarChart(listOfLine)
 ![Alt text](/img/VisDataBarChart.png?raw=true "bar chart")
 ![Alt text](/img/VisDataCircularBarChart.png?raw=true "circular bar chart")
 ![Alt text](/img/VisDataExample.png?raw=true "data vis example")
-
-
 
