@@ -98,9 +98,10 @@ Reference: ASHRAE Handbook of Fundamentals
 - parameters: Latitude(number), Day(number), Hour(number), South(number)
 - returns: SolarPath(line), SolarVector(point), SolarLog(string)
 
-### GridOptimizerWithinPolyline.js 
-- parameters: 
-- returns: 
+### GridOptimizerWithinPolyline.js
+![Alt text](/img/GridOptimizerWithinPolyline.png?raw=true "Grid Optimizer Within Polyline")
+- parameters: boundary(Polyline), angle(number), xSpan(number), ySpan(number), xOff(number), yOff(number), remap(bool)
+- returns: Pts(PointList), boundary(Polyline), NumPts(number)
 
 
 >Data Visualization
