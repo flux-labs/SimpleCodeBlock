@@ -167,9 +167,17 @@ NPolyline.BuildWithVecs = function(vecs){
 }
 NPolyline.BuildWithPoint = function(vecs){
   var np = new NPolyline();
-  for(let i = 0, c = vecs.length; i < c ; ++i){
+  
+  if(vecs[0].primitive === "polyline"){
+    vecs[0].points.forEach(function(pt){
+      console.log(pt);
+      np.Add(new NVector(pt[0], pt[1], pt[2] ));
+    })  
+  }else{
+    for(let i = 0, c = vecs.length; i < c ; ++i){
     //np.Add(new NVector(vecs[i].__data__.point[0], vecs[i].__data__.point[1], vecs[i].__data__.point[2] ));
-    np.Add(new NVector(vecs[i].point[0], vecs[i].point[1], vecs[i].point[2] ));
+      np.Add(new NVector(vecs[i].point[0], vecs[i].point[1], vecs[i].point[2] ));
+    }
   }
   return np;
 }
