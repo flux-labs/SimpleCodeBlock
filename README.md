@@ -93,22 +93,26 @@ static methods
 * .BuildWithPoint(PointList) : create NPolyline from Point list
 * .BuildWithLine(LineList) : create NPolyline from line list
 
-It automatically find an optimized point gird with tolerance by the number.
+It automatically finds an optimized point gird with tolerance by the number.
 ![Alt text](/img/Polyline_GridOptimizer_01.png?raw=true "NPolyline")
 The number of point in the grid is 50, and it takes 6 iteractions to meet the number within the tolerance.
 ![Alt text](/img/Polyline_GridOptimizer_02.png?raw=true "NPolyline")
 The number of point in the grid is 106, and it takes 4 iteractions to meet the number within the tolerance.
-
-### SunVector.js
-Reference: ASHRAE Handbook of Fundamentals
-- parameters: Latitude(number), Day(number), Hour(number), South(number)
-- returns: SolarPath(line), SolarVector(point), SolarLog(string)
 
 ### GridOptimizerWithinPolyline.js
 ![Alt text](/img/GridOptimizerWithinPolyline.png?raw=true "Grid Optimizer Within Polyline")
 - parameters: boundary(Polyline), angle(number), xSpan(number), ySpan(number), xOff(number), yOff(number), remap(bool)
 - returns: Pts(PointList), boundary(Polyline), NumPts(number)
 
+### ExtractOuterVertices.js
+![Alt text](/img/ExtractOuterVertices.png?raw=true "Grid Optimizer Within Polyline")
+- parameters: In (Mesh)
+- returns: Out (PointList)
+
+### SunVector.js
+Reference: ASHRAE Handbook of Fundamentals
+- parameters: Latitude(number), Day(number), Hour(number), South(number)
+- returns: SolarPath(line), SolarVector(point), SolarLog(string)
 
 >Data Visualization
 
