@@ -1,7 +1,7 @@
 'use strict';
 var modeling = require('flux-modelingjs').initialize().modeling;
 
-function run(Points, Closed) {
+function run(Points, Closed, Num) {
   var np = NPolyline.BuildWithPoint(Points);
   if(Closed) {
     np.Closed();
@@ -13,7 +13,9 @@ function run(Points, Closed) {
       Mesh: np.ToMesh(),
       Length: np.ComputeLength(),
       Area: np.ComputeArea(),
-      Cpt : np.GetCenterPt()
+      Cpt : np.GetCenterPt(),
+      Grid : NVector.ToFluxForList(np.GetVectorGridbyOptimizationWithDistance(Num)),
+      IterNum : np.numberForIter
   };
 }
 module.exports = {
@@ -25,6 +27,7 @@ function NPolyline(){
   this.pts = [];
   this.isClosed = true;
   this.mesh = null;
+  this.numberForIter = 0; // this show how many iteration that you did to meet the opimal num.
 }
 NPolyline.prototype.Add = function(v){
   if (this.pts.length > 1){
@@ -84,6 +87,104 @@ NPolyline.prototype.GetCenterPt = function(){
     return modeling.entities.point([pt[0]/c,pt[1]/c,pt[2]/c]);
   }
 }
+
+NPolyline.prototype.GetVectorGridbyOptimizationWithDistance=function(targetNum){
+    let vecs = []
+    let vecBound = this.GetBoundingBox();
+
+    let resDistance = (vecBound.pts[1].x - vecBound.pts[0].x) / 10;
+
+    // tolerance
+    let numTor = targetNum * 0.1;
+    let numTorForStep = 0.000005;
+
+    let numForTotalLoop = 0;
+    while (numForTotalLoop < 100)
+    {
+        this.numberForIter = numForTotalLoop;
+        vecs = this.GetVectorGridByDis(resDistance);
+        if (targetNum < vecs.length)
+        {
+            let numInrease = 0.1 + ((vecs.length - targetNum) * numTorForStep);
+
+            resDistance += numInrease;
+        }
+        else if (vecs.length < targetNum)
+        {
+            let numInrease = 0.1 + ((vecs.length - targetNum) * numTorForStep);
+            resDistance -= numInrease;
+        }
+        if (vecs.length < targetNum + numTor && vecs.length > targetNum - numTor) break;
+        numForTotalLoop++;
+    }
+
+    return vecs;
+}
+NPolyline.prototype.GetVectorGridByDis=function(distance){
+    if (distance < 0.05) distance = 0.05; 
+    let vecs = [];
+
+    let vecBound = this.GetBoundingBox();
+    let p1 = vecBound.pts[0];
+    let p2 = vecBound.pts[2];
+
+    let xTotal = (p2.x - p1.x);
+    let yTotal = (p2.y - p1.y);
+
+    let xNumForLoop = xTotal / distance;
+    let yNumForLoop = yTotal / distance;
+
+    let xOff = distance * 0.5;
+    let yOff = distance * 0.5;
+
+    for (let y = 0; y < yNumForLoop; ++y)
+    {
+        for (let x = 0; x < xNumForLoop; ++x)
+        {
+            let v = new NVector(p1.x + xOff + (x * distance), p1.y + yOff + (y * distance), 0);
+            if (this.IsInside(v)) vecs.push(v);
+            // vecs.push(v);
+        }
+    }
+    return vecs;
+}
+NPolyline.prototype.IsInside=function(v){
+    var x = v.x, y = v.y;
+    var inside = false;
+    this.Open();
+    for (var i = 0, j = this.pts.length - 1; i < this.pts.length; j = i++){
+        var xi = this.pts[i].x, yi = this.pts[i].y;
+        var xj = this.pts[j].x, yj = this.pts[j].y;
+        var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    return inside;
+    // return true;
+}
+NPolyline.prototype.GetBoundingBox=function(){
+    if (this.pts.length == 0){
+        return null;
+    }
+    let pl = new NPolyline();
+    let min = new NVector(this.pts[0].x, this.pts[0].y, this.pts[0].z);
+    let max = new NVector(this.pts[0].x, this.pts[0].y, this.pts[0].z);
+    for (let i = 0, c = this.pts.length; i < c; ++i){
+        if (min.x > this.pts[i].x) min.x = this.pts[i].x;
+        if (max.x < this.pts[i].x) max.x = this.pts[i].x;
+
+        if (min.y > this.pts[i].y) min.y = this.pts[i].y;
+        if (max.y < this.pts[i].y) max.y = this.pts[i].y;
+
+        if (min.z > this.pts[i].z) min.z = this.pts[i].z;
+        if (max.z < this.pts[i].z) max.z = this.pts[i].z;
+    }
+    pl.Add(min);
+    pl.Add(new NVector(min.x, max.y, 0));
+    pl.Add(max);
+    pl.Add(new NVector(max.x, min.y, 0));
+    return pl;
+}
+
 NPolyline.prototype.ComputeArea = function(){ // !!!!this doe not consider concave
   let area = 0.0;
   if(this.pts[0].Distance(this.pts[this.pts.length-1]) == 0){
@@ -247,3 +348,13 @@ NVector.prototype.Distance = function(v){
 NVector.Distance = function(v1, v2){
     return (Math.abs(Math.sqrt(((v2.x - v1.x) * (v2.x - v1.x)) + ((v2.y - v1.y) * (v2.y - v1.y)) + ((v2.z - v1.z) * (v2.z - v1.z)))));
 };
+NVector.FromFluxPoint=function(p){
+  return new NVector(p.point[0], p.point[1], p.point[2] );
+}
+NVector.ToFluxForList = function(vecs){
+  let FPts = [];
+  for(let i =0, c = vecs.length; i < c; ++i){
+    FPts.push(modeling.entities.point([vecs[i].x, vecs[i].y, vecs[i].z]));
+  }
+  return FPts;
+}
