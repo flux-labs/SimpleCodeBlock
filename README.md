@@ -93,6 +93,12 @@ static methods
 * .BuildWithPoint(PointList) : create NPolyline from Point list
 * .BuildWithLine(LineList) : create NPolyline from line list
 
+It automatically find an optimized point gird with tolerance by the number.
+![Alt text](/img/Polyline_GridOptimizer_01.png?raw=true "NPolyline")
+The number of point in the grid is 50, and it takes 6 iteractions to meet the number within the tolerance.
+![Alt text](/img/Polyline_GridOptimizer_02.png?raw=true "NPolyline")
+The number of point in the grid is 106, and it takes 4 iteractions to meet the number within the tolerance.
+
 ### SunVector.js
 Reference: ASHRAE Handbook of Fundamentals
 - parameters: Latitude(number), Day(number), Hour(number), South(number)
