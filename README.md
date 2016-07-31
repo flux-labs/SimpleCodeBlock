@@ -1,6 +1,7 @@
 ### Flux: Code Block
 > Simple Code Blocks from the Parkerator Phase 1 and 2
 
+
 ### Domain.js
 - parameters: min(number), max(number)
 - returns: Domain(list of number)
