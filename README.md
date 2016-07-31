@@ -72,11 +72,6 @@ Reference: [point-in-polygon](https://github.com/substack/point-in-polygon)
 - parameters: Polyline(ListOfPoints), Point
 - returns: Boolean
 
-### ReOrderLine.js
-![Alt text](/img/ReOrderLine.png?raw=true "ReOrderLine")
-- parameters: line(unordered line list)
-- returns: line(ordered line list)
-
 ### NPolyline
 ![Alt text](/img/Polyline.png?raw=true "NPolyline")
 - parameters: Point(ListOfPoint), closed(bool)
@@ -113,6 +108,11 @@ The number of point in the grid is 106, and it takes 4 iteractions to meet the n
 ![Alt text](/img/ExtractOuterVertices.png?raw=true "Grid Optimizer Within Polyline")
 - parameters: In (Mesh)
 - returns: Out (PointList)
+
+### ReOrderLine.js
+![Alt text](/img/ReOrderLines.png?raw=true "ReOrderLine")
+- parameters: line(unordered line list)
+- returns: line(ordered line list)
 
 ### SunVector.js
 Reference: ASHRAE Handbook of Fundamentals
