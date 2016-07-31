@@ -72,6 +72,11 @@ Reference: [point-in-polygon](https://github.com/substack/point-in-polygon)
 - parameters: Polyline(ListOfPoints), Point
 - returns: Boolean
 
+### ReOrderLine.js
+![Alt text](/img/ReOrderLine.png?raw=true "ReOrderLine")
+- parameters: line(unordered line list)
+- returns: line(ordered line list)
+
 ### NPolyline
 ![Alt text](/img/Polyline.png?raw=true "NPolyline")
 - parameters: Point(ListOfPoint), closed(bool)
